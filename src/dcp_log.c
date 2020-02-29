@@ -104,7 +104,7 @@ LogPrint(LogType type, const char *msg, ...)
         sprintf(tempLogBuff, "%s: ", UserLogType);
     } else { sprintf(tempLogBuff, "%s: ", LOGTYPES[type]); }
 
-    strncat(tempLogBuff, msg, 1015);
+    strncat(tempLogBuff, msg, 1000);
     len = vsnprintf(Log.LineBuffer, 80, tempLogBuff, args);
 
     if (len < LOGLINE - 1) { strcat(Log.LineBuffer, "\n"); }
