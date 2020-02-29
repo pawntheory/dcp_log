@@ -25,5 +25,5 @@ int BeginLogging(void);
 int EndLogging(void);
 void SetUserLogType(const char *str);
 void ClearUserLogType(void);
-void LogPrint(LogType type, char *msg, ...);
+void LogPrint(LogType type, const char *msg, ...);
 #endif /* DCP_LOG_H_ */

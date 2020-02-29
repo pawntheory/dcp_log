@@ -8,6 +8,7 @@
 /* TODO:
    - Timestamps
    - Predefined logging functions
+   - Close the file stream and free the log line buffer on catchable failures
    - Logging callbacks for user-created functions  */
 
 #define LOGLINE 80
@@ -36,14 +37,15 @@ static LogFile Log;
 int
 BeginLogging(void)
 {
+    /* TODO:
+       - Initialize output methods
+       - Check if file exists/if file is directory
+       - Check if file exceeds set limits and archive file if it does
+       - Include using alternate log file locations/names
+       - Handle error checking  */
+
     if (!LoggingEnabled) {
         IErrState = IERR_NONE;
-        /* TODO:
-           - Initialize output methods
-           - Check if file exists/if file is directory
-           - Check if file exceeds set limits and archive file if it does
-           - Include using alternate log file locations/names
-           - Handle error checking  */
         Log.File = fopen("lcurrent.log", "a+");
         Log.LineBuffer = (char *)calloc(LOGLINE + 1, sizeof(char));
         ClearUserLogType();
@@ -52,7 +54,7 @@ BeginLogging(void)
 
         return 0;
     } else {
-        /* TODO: error message */
+        /* TODO: Error message */
         return IERR_UNCLEAN_REINIT;
     }
 }
@@ -61,6 +63,7 @@ int
 EndLogging(void)
 {
     /* TODO: Handle error checking  */
+
     if (LoggingEnabled) {
         fclose(Log.File);
         free(Log.LineBuffer);
@@ -69,7 +72,7 @@ EndLogging(void)
 
         return 0;
     } else {
-        /* TODO: error message */
+        /* TODO: Error message */
         return IERR_UNCLEAN_CLOSE;
     }
 }
@@ -89,7 +92,7 @@ ClearUserLogType(void)
 }
 
 void
-LogPrint(LogType type, char *msg, ...)
+LogPrint(LogType type, const char *msg, ...)
 {
     char tempLogBuff[1024] = { '\0' };
     int len = 0;
@@ -104,18 +107,15 @@ LogPrint(LogType type, char *msg, ...)
     strncat(tempLogBuff, msg, 1015);
     len = vsnprintf(Log.LineBuffer, 80, tempLogBuff, args);
 
-    if (len < LOGLINE - 1) {
-        strcat(Log.LineBuffer, "\n");
-    } else {
-        Log.LineBuffer[LOGLINE - 1] = '\n';
-    }
+    if (len < LOGLINE - 1) { strcat(Log.LineBuffer, "\n"); }
+    else { Log.LineBuffer[LOGLINE - 1] = '\n'; }
 
     va_end(args);
 
     Log.LineBuffer[LOGLINE] = '\0';
 
     fprintf(Log.File, Log.LineBuffer);
-    /* TODO: print to stderr/stdout via fprintf or user callback if set
+    /* TODO: Print to stderr/stdout via fprintf or user callback if set
        by initialize function  */
 
     /* NOTE: clear the LineBuffer for future use  */
