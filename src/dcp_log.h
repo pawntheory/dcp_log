@@ -6,6 +6,9 @@
 enum ELogType
 {
     LTYPE_INFO,
+    LTYPE_ERROR,
+    LTYPE_WARNING,
+    LTYPE_FATAL,
     LTYPE_USER
 };
 typedef enum ELogType LogType;
@@ -20,5 +23,7 @@ typedef struct ELogFile LogFile;
 
 int BeginLogging(void);
 int EndLogging(void);
+void SetUserLogType(const char *str);
+void ClearUserLogType(void);
 void LogPrint(LogType type, char *msg, ...);
 #endif /* DCP_LOG_H_ */
