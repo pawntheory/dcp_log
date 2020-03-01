@@ -1,23 +1,28 @@
+#include <stdio.h>
+
 #include "dcp_log.h"
 
 int
 main(void)
 {
-    BeginLogging(LOGNORMAL);
-
-    LogPrint(LTYPE_WARNING, "There is no reason for you to continue");
-    LogPrint(LTYPE_WARNING, "Resistance is %s",
-            "futile.  You are the stupidest person I have ever met.");
+    BeginLogging(LOGTSTAMP | LOGLABELS, NULL);
+    LogPrint(LTYPE_INFO, "This is an informative message.");
+    LogPrint(LTYPE_WARNING, "This is a warning message.");
+    LogPrint(LTYPE_ERROR, "This is an error message.");
+    LogPrint(LTYPE_FATAL, "This is a fatal error message.");
+    LogPrint(LTYPE_USER, "This is a user-defined message.");
     SetUserLogType("CUSTOM");
-    LogPrint(LTYPE_USER, "Error essage");
-    ClearUserLogType();
-    LogPrint(LTYPE_USER, "Not found: %s.", "lost");
-
+    LogPrint(LTYPE_USER, "This is a custom user-defined message.");
     EndLogging();
 
-    BeginLogging(LOGLABELS);
-    LogPrint(LTYPE_WARNING, "Resistance is %s",
-            "futile.  You are the stupidest person I have ever met.");
+    BeginLogging(LOGLABELS, "custom.log");
+    LogPrint(LTYPE_INFO, "This is an informative message.");
+    LogPrint(LTYPE_WARNING, "This is a warning message.");
+    LogPrint(LTYPE_ERROR, "This is an error message.");
+    LogPrint(LTYPE_FATAL, "This is a fatal error message.");
+    LogPrint(LTYPE_USER, "This is a user-defined message.");
+    SetUserLogType("CUSTOM");
+    LogPrint(LTYPE_USER, "This is a custom user-defined message.");
     EndLogging();
 
     return 0;

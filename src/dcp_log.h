@@ -20,7 +20,7 @@ enum ELogType
 };
 typedef enum ELogType LogType;
 
-int BeginLogging(unsigned int LogPrefix);
+int BeginLogging(unsigned int logPrefix, const char *logFilename);
 int EndLogging(void);
 
 void LogPrint(LogType type, const char *msg, ...);

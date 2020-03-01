@@ -39,20 +39,25 @@ static struct ILogFile
 } Log;
 
 int
-BeginLogging(unsigned int logPrefix)
+BeginLogging(unsigned int logPrefix, const char *logFilename)
 {
     /* TODO:
        - Initialize output methods
        - Check if file is directory
        - Check if file exceeds set limits and archive file if it does
-       - Include using alternate log file locations/names
        - Handle error checking  */
 
     if (!LoggingEnabled) {
         IErrState = IERR_NONE;
 
-        if (!(Log.File = fopen("lcurrent.log", "a+"))) {
-            Log.File = fopen("lcurrent.log", "w+");
+        if (logFilename != NULL) {
+            if (!(Log.File = fopen(logFilename, "a+"))) {
+                Log.File = fopen(logFilename, "w+");
+            }
+        } else {
+            if (!(Log.File = fopen("default.log", "a+"))) {
+                Log.File = fopen("default.log", "w+");
+            }
         }
 
         memset(Log.LineBuffer, '\0', LOGLINE + 1);
