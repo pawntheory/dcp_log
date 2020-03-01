@@ -8,7 +8,6 @@
 /* TODO:
    - Predefined logging functions
    - Close the file stream and free the log line buffer on catchable failures
-   - Possibly prevent newlines in message body for cleaner log output
    - Logging callbacks for user-created functions  */
 
 static _Bool LoggingEnabled = 0;
@@ -132,6 +131,14 @@ LogPrint(LogType type, const char *msg, ...)
     }
 
     strncat(tempLogBuff, msg, 1024 - len);
+
+    /* NOTE: Remove newlines from message  */
+    for (int i = 0; i < 1024; i++) {
+        if (tempLogBuff[i] == '\n' || tempLogBuff[i] == '\r') {
+            tempLogBuff[i] = ' ';
+        }
+    }
+
     len = vsnprintf(Log.LineBuffer, 80, tempLogBuff, args);
 
     va_end(args);
