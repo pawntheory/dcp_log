@@ -3,6 +3,9 @@
 
 #include <stdio.h>
 
+#define LOGLINE 80
+#define USERLOG 16
+
 enum ELogType
 {
     LTYPE_INFO,
@@ -16,7 +19,7 @@ typedef enum ELogType LogType;
 struct ELogFile
 {
     FILE *File;
-    char *LineBuffer;
+    char LineBuffer[LOGLINE + 1];
     int LineNumber;
 };
 typedef struct ELogFile LogFile;

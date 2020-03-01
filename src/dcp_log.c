@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
 
@@ -9,10 +8,8 @@
    - Timestamps
    - Predefined logging functions
    - Close the file stream and free the log line buffer on catchable failures
+   - Possibly prevent newlines in message body for cleaner log output
    - Logging callbacks for user-created functions  */
-
-#define LOGLINE 80
-#define USERLOG 16
 
 static _Bool LoggingEnabled = 0;
 
@@ -47,7 +44,7 @@ BeginLogging(void)
     if (!LoggingEnabled) {
         IErrState = IERR_NONE;
         Log.File = fopen("lcurrent.log", "a+");
-        Log.LineBuffer = (char *)calloc(LOGLINE + 1, sizeof(char));
+        memset(Log.LineBuffer, '\0', LOGLINE + 1);
         ClearUserLogType();
 
         LoggingEnabled = 1;
@@ -66,7 +63,6 @@ EndLogging(void)
 
     if (LoggingEnabled) {
         fclose(Log.File);
-        free(Log.LineBuffer);
 
         LoggingEnabled = 0;
 

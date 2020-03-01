@@ -5,8 +5,8 @@ main(void)
 {
     BeginLogging();
 
-    SetUserLogType("PANIC!");
-    LogPrint(LTYPE_USER, "At the disco?");
+    SetUserLogType("CUSTOM");
+    LogPrint(LTYPE_USER, "Error essage");
     ClearUserLogType();
     LogPrint(LTYPE_USER, "Not found: %s.", "lost");
 
