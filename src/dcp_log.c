@@ -29,7 +29,12 @@ static enum IErrorType
     IERR_UNCLEAN_CLOSE
 } IErrState;
 
-static LogFile Log;
+static struct ILogFile
+{
+    FILE *File;
+    char LineBuffer[LOGLINE + 1];
+    int LineNumber;
+} Log;
 
 int
 BeginLogging(void)
@@ -74,20 +79,6 @@ EndLogging(void)
 }
 
 void
-SetUserLogType(const char *str)
-{
-    UserLogEnabled = 1;
-    snprintf(UserLogType, USERLOG, "%s", str);
-}
-
-void
-ClearUserLogType(void)
-{
-    UserLogEnabled = 0;
-    memset(UserLogType, '\0', USERLOG + 1);
-}
-
-void
 LogPrint(LogType type, const char *msg, ...)
 {
     char tempLogBuff[1024] = { '\0' };
@@ -116,4 +107,18 @@ LogPrint(LogType type, const char *msg, ...)
 
     /* NOTE: clear the LineBuffer for future use  */
     memset(Log.LineBuffer, '\0', LOGLINE + 1);
+}
+
+void
+SetUserLogType(const char *str)
+{
+    UserLogEnabled = 1;
+    snprintf(UserLogType, USERLOG, "%s", str);
+}
+
+void
+ClearUserLogType(void)
+{
+    UserLogEnabled = 0;
+    memset(UserLogType, '\0', USERLOG + 1);
 }

@@ -16,17 +16,11 @@ enum ELogType
 };
 typedef enum ELogType LogType;
 
-struct ELogFile
-{
-    FILE *File;
-    char LineBuffer[LOGLINE + 1];
-    int LineNumber;
-};
-typedef struct ELogFile LogFile;
-
 int BeginLogging(void);
 int EndLogging(void);
+
+void LogPrint(LogType type, const char *msg, ...);
+
 void SetUserLogType(const char *str);
 void ClearUserLogType(void);
-void LogPrint(LogType type, const char *msg, ...);
 #endif /* DCP_LOG_H_ */
