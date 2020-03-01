@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
+#include <time.h>
 
 #include "dcp_log.h"
 
 /* TODO:
-   - Timestamps
    - Predefined logging functions
    - Close the file stream and free the log line buffer on catchable failures
    - Possibly prevent newlines in message body for cleaner log output
@@ -16,8 +16,10 @@ static _Bool LoggingEnabled = 0;
 static _Bool UserLogEnabled = 0;
 static char UserLogType[USERLOG + 1];
 
+static unsigned int LogPrefix = 0;
+
 static const char *LOGTYPES[5] = {
-    "INFO", "WARN", "ERROR", "FATAL", "USER"
+    "INFO", "WARNING", "ERROR", "FATAL", "USER"
 };
 
 /* Internal Error Handling */
@@ -37,21 +39,26 @@ static struct ILogFile
 } Log;
 
 int
-BeginLogging(void)
+BeginLogging(unsigned int logPrefix)
 {
     /* TODO:
        - Initialize output methods
-       - Check if file exists/if file is directory
+       - Check if file is directory
        - Check if file exceeds set limits and archive file if it does
        - Include using alternate log file locations/names
        - Handle error checking  */
 
     if (!LoggingEnabled) {
         IErrState = IERR_NONE;
-        Log.File = fopen("lcurrent.log", "a+");
+
+        if (!(Log.File = fopen("lcurrent.log", "a+"))) {
+            Log.File = fopen("lcurrent.log", "w+");
+        }
+
         memset(Log.LineBuffer, '\0', LOGLINE + 1);
         ClearUserLogType();
 
+        LogPrefix = logPrefix;
         LoggingEnabled = 1;
 
         return 0;
@@ -69,6 +76,7 @@ EndLogging(void)
     if (LoggingEnabled) {
         fclose(Log.File);
 
+        LogPrefix = LOGNORMAL;
         LoggingEnabled = 0;
 
         return 0;
@@ -87,17 +95,44 @@ LogPrint(LogType type, const char *msg, ...)
     va_list args;
     va_start(args, msg);
 
-    if (UserLogEnabled && (type == LTYPE_USER)) {
-        sprintf(tempLogBuff, "%s: ", UserLogType);
-    } else { sprintf(tempLogBuff, "%s: ", LOGTYPES[type]); }
+    if (LogPrefix & LOGTSTAMP) {
+        char tempTimeBuff[128] = { '\0' };
 
-    strncat(tempLogBuff, msg, 1000);
+        int hour, minute, second, day, month, year;
+        time_t now;
+
+        time(&now);
+        struct tm *local = localtime(&now);
+
+        hour = local->tm_hour;
+        minute = local->tm_min;
+        second = local->tm_sec;
+        day = local->tm_mday;
+        month = local->tm_mon + 1;
+        year = local->tm_year + 1900;
+
+        len += sprintf(tempTimeBuff, "[%02d%02d%d %02d:%02d:%02d] ",
+                month, day, year, hour, minute, second);
+        strcat(tempLogBuff, tempTimeBuff);
+    }
+
+    if (LogPrefix & LOGLABELS) {
+        char tempLablBuff[128] = { '\0' };
+
+        if (UserLogEnabled && (type == LTYPE_USER)) {
+            len += sprintf(tempLablBuff, "%s: ", UserLogType);
+        } else { len += sprintf(tempLablBuff, "%s: ", LOGTYPES[type]); }
+
+        strcat(tempLogBuff, tempLablBuff);
+    }
+
+    strncat(tempLogBuff, msg, 1024 - len);
     len = vsnprintf(Log.LineBuffer, 80, tempLogBuff, args);
+
+    va_end(args);
 
     if (len < LOGLINE - 1) { strcat(Log.LineBuffer, "\n"); }
     else { Log.LineBuffer[LOGLINE - 1] = '\n'; }
-
-    va_end(args);
 
     Log.LineBuffer[LOGLINE] = '\0';
 

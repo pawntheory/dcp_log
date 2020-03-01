@@ -6,17 +6,21 @@
 #define LOGLINE 80
 #define USERLOG 16
 
+#define LOGNORMAL 0x0
+#define LOGLABELS 0x1
+#define LOGTSTAMP 0x2
+
 enum ELogType
 {
     LTYPE_INFO,
-    LTYPE_ERROR,
     LTYPE_WARNING,
+    LTYPE_ERROR,
     LTYPE_FATAL,
     LTYPE_USER
 };
 typedef enum ELogType LogType;
 
-int BeginLogging(void);
+int BeginLogging(unsigned int LogPrefix);
 int EndLogging(void);
 
 void LogPrint(LogType type, const char *msg, ...);
