@@ -3,9 +3,6 @@
 
 #include <stdio.h>
 
-#define LOGLINE 80
-#define USERLOG 16
-
 #define LOGNORMAL 0x0
 #define LOGLABELS 0x1
 #define LOGTSTAMP 0x2

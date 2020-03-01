@@ -5,6 +5,9 @@
 
 #include "dcp_log.h"
 
+#define LOGLINE 80
+#define USERLOG 16
+
 /* TODO:
    - Predefined logging functions
    - Close the file stream and free the log line buffer on catchable failures
@@ -134,8 +137,12 @@ LogPrint(LogType type, const char *msg, ...)
 
     /* NOTE: Remove newlines from message  */
     for (int i = 0; i < 1024; i++) {
-        if (tempLogBuff[i] == '\n' || tempLogBuff[i] == '\r') {
-            tempLogBuff[i] = ' ';
+        switch (tempLogBuff[i]) {
+            case '\n':
+            case '\r':
+            case '\t': {
+                tempLogBuff[i] = ' '; }
+            break;
         }
     }
 
