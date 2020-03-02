@@ -26,8 +26,8 @@ Begins the logging session, opens a logging stream (`default.log` if
 the logFilename argument is NULL), and determines the log prefixes.
 
 The types of log prefixes are currently:
-- LOGLABELS - Shows the label before your log line.
-- LOGTSTAMP - Shows a date/timestamp before your log line.
+- `LOGLABELS` - Shows the label before your log line.
+- `LOGTSTAMP` - Shows a date/timestamp before your log line.
 
 ## `EndLogging()`
 
