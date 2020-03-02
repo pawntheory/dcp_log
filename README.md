@@ -1,5 +1,7 @@
 # `dcp_log` - a logging thing for things
 
+## Building
+
 To build, just run `make`.  It should just compile without issue if you have
 GNU make and GCC set up correctly.  If not, let me know; I've probably
 overlooked something.
@@ -8,6 +10,8 @@ Include `dcp_log.h` in whatever file you want to have logging enabled.
 
 - Each printed line removes any included newlines, carriage returns, and tabs.
 - Each printed line is a maximum of 80 characters.
+
+## Log Types
 
 The types of logs are currently:
 - `LTYPE_INFO`
