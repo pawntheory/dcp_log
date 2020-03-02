@@ -8,7 +8,7 @@ overlooked something.
 
 Include `dcp_log.h` in whatever file you want to have logging enabled.  Once
 built, creates both static and shared library files (`libdcplog.a` and
-`libdcplig.so`).
+`libdcplog.so`).
 
 - Each printed line removes any included newlines, carriage returns, and tabs.
 - Each printed line is a maximum of 80 characters.
