@@ -6,7 +6,9 @@ To build, just run `make`.  It should just compile without issue if you have
 GNU make and GCC set up correctly.  If not, let me know; I've probably
 overlooked something.
 
-Include `dcp_log.h` in whatever file you want to have logging enabled.
+Include `dcp_log.h` in whatever file you want to have logging enabled.  Once
+built, creates both static and shared library files (`libdcplog.a` and
+`libdcplig.so`).
 
 - Each printed line removes any included newlines, carriage returns, and tabs.
 - Each printed line is a maximum of 80 characters.
@@ -20,7 +22,7 @@ The types of logs are currently:
 - `LTYPE_FATAL`
 - `LTYPE_USER`†
 
-> †Uses `SetUserLogType()` to change to a user-defined type (<= 16 characters)
+> † Uses `SetUserLogType()` to change to a user-defined type (<= 16 characters)
 
 ## `BeginLogging()`
 
