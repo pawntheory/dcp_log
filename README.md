@@ -19,7 +19,7 @@ Include `dcp_log.h` in whatever file you want to have logging enabled.
 - Each printed line removes any included newlines, carriage returns, and tabs.
 - Each printed line is a maximum of 80 characters.
 
-## Log Types
+### Log Types
 
 The types of logs are currently:
 - `LTYPE_INFO`
@@ -30,7 +30,7 @@ The types of logs are currently:
 
 > † Uses `SetUserLogType()` to change to a user-defined type (<= 16 characters)
 
-## `BeginLogging()`
+### `BeginLogging()`
 
 > `int BeginLogging(unsigned int logPrefix, const char *logFilename);`
 
@@ -41,23 +41,23 @@ The types of log prefixes are currently:
 - `LOGLABELS` - Shows the label before your log line.
 - `LOGTSTAMP` - Shows a date/timestamp before your log line.
 
-## `EndLogging()`
+### `EndLogging()`
 
 > `int EndLogging(void);`
 
 Self Explanatory.  Ends the logging session and closes the logging stream.
 
-## `LogPrint()`
+### `LogPrint()`
 
 > `void LogPrint(LogType type, const char *msg, ...);`
 
 Prints your log message to both the log stream and stderr.
 Maximum 80 characters (including any prefixes).
 
-## `SetUserLogType()`
+### `SetUserLogType()`
 
 > `void SetUserLogType(const char *str);`
 
-## `ClearUserLogType()`
+### `ClearUserLogType()`
 
 > `void ClearUserLogType(void);`
