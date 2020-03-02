@@ -63,6 +63,7 @@ BeginLogging(unsigned int logPrefix, const char *logFilename)
         fprintf(stderr, "WARNING: Tried to begin log with status %d.\n",
                 LoggingEnabled);
         fprintf(stderr, "\tLogging already initialized.\n");
+
         return IERR_UNCLEAN_REINIT;
     }
 }
@@ -81,6 +82,7 @@ EndLogging(void)
         fprintf(stderr, "WARNING: Tried to end log with status %d.\n",
                 LoggingEnabled);
         fprintf(stderr, "\tLogging not yet initialized.\n");
+
         return IERR_UNCLEAN_CLOSE;
     }
 }

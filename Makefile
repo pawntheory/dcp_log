@@ -1,17 +1,23 @@
 CC=gcc
-CFLAGS=-O2 -Isrc -Wall -Wextra -DNDEBUG $(OPTFLAGS)
+CFLAGS=-O2 -Isrc -DNDEBUG $(OPTFLAGS)
 LDLIBS=
 LDFLAGS=$(OPTLIBS)
-
-PROJ=build/dcp_log
 
 SOURCES=$(wildcard src/**/*.c src/*.c)
 OBJECTS=$(patsubst %.c,%.o,$(SOURCES))
 
-all: $(OBJECTS) $(PROJ)
+TARGET=build/libdcplog.a
+SO_TARGET=$(patsubst %.a,%.so,$(TARGET))
 
-$(PROJ): build $(OBJECTS)
-	$(CC) -o $@ $(OBJECTS) $(CFLAGS) $(LDLIBS) $(LDFLAGS)
+all: $(TARGET) $(SO_TARGET)
+
+$(TARGET): CFLAGS+=-fPIC
+$(TARGET): build $(OBJECTS)
+	ar rcs $@ $(OBJECTS)
+	ranlib $@
+
+$(SO_TARGET): $(TARGET) $(OBJECTS)
+	$(CC) -shared -o $@ $(OBJECTS)
 
 build:
 	@mkdir -p build
@@ -21,5 +27,4 @@ dev: all
 
 .PHONY: clean
 clean:
-	rm -fr build
-	rm -f $(OBJECTS)
+	rm -fr build $(OBJECTS)
