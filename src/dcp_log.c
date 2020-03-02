@@ -88,6 +88,12 @@ EndLogging(void)
 void
 LogPrint(LogType type, const char *msg, ...)
 {
+    if (!LoggingEnabled) {
+        fprintf(stderr, "WARNING: Tried to print log with status %d.\n",
+                LoggingEnabled);
+        return;
+    }
+
     char tempLogBuff[1024] = { '\0' };
     int len = 0;
 
