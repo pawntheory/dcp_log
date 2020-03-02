@@ -17,7 +17,7 @@ overlooked something.
 Include `dcp_log.h` in whatever file you want to have logging enabled.
 
 - Each printed line removes any included newlines, carriage returns, and tabs.
-- Each printed line is a maximum of 80 characters.
+- Each printed line is a maximum of 80 characters, prefixes included.
 
 ### Log Prefix Types
 
