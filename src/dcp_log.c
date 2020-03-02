@@ -58,7 +58,7 @@ BeginLogging(unsigned int logPrefix, const char *logFilename)
         LogPrefix = logPrefix;
         LoggingEnabled = 1;
 
-        return 0;
+        return IERR_NONE;
     } else {
         fprintf(stderr, "WARNING: Tried to begin log with status %d.\n",
                 LoggingEnabled);
@@ -76,7 +76,7 @@ EndLogging(void)
         LogPrefix = LOGNORMAL;
         LoggingEnabled = 0;
 
-        return 0;
+        return IERR_NONE;
     } else {
         fprintf(stderr, "WARNING: Tried to end log with status %d.\n",
                 LoggingEnabled);
@@ -88,6 +88,12 @@ EndLogging(void)
 void
 LogPrint(LogType type, const char *msg, ...)
 {
+    if (!LoggingEnabled) {
+        fprintf(stderr, "WARNING: Tried to print log with status %d.\n",
+                LoggingEnabled);
+        return;
+    }
+
     char tempLogBuff[1024] = { '\0' };
     int len = 0;
 
