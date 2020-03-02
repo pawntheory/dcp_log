@@ -20,6 +20,8 @@ The types of logs are currently:
 
 ## `BeginLogging()`
 
+> `int BeginLogging(unsigned int logPrefix, const char *logFilename);`
+
 Begins the logging session, opens a logging stream (`default.log` if
 the logFilename argument is NULL), and determines the log prefixes.
 
@@ -29,9 +31,21 @@ The types of log prefixes are currently:
 
 ## `EndLogging()`
 
+> `int EndLogging(void);`
+
 Self Explanatory.  Ends the logging session and closes the logging stream.
 
 ## `LogPrint()`
 
+> `void LogPrint(LogType type, const char *msg, ...);`
+
 Prints your log message to both the log stream and stderr.
 Maximum 80 characters (including any prefixes).
+
+## `SetUserLogType()`
+
+> `void SetUserLogType(const char *str);`
+
+## `ClearUserLogType()`
+
+> `void ClearUserLogType(void);`
