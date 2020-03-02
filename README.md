@@ -2,13 +2,17 @@
 
 ## Building
 
-To build, just run `make`.  It should just compile without issue if you have
+To build, just run `make`.  Once built both static and shared library files are
+created.
+
+- `libdcplog.a`
+- `libdcplog.so`
+
+It should just compile without issue if you have
 GNU make and GCC set up correctly.  If not, let me know; I've probably
 overlooked something.
 
-Include `dcp_log.h` in whatever file you want to have logging enabled.  Once
-built, creates both static and shared library files (`libdcplog.a` and
-`libdcplog.so`).
+Include `dcp_log.h` in whatever file you want to have logging enabled.
 
 - Each printed line removes any included newlines, carriage returns, and tabs.
 - Each printed line is a maximum of 80 characters.
