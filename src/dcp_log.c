@@ -8,11 +8,6 @@
 #define LOGLINE 80
 #define USERLOG 16
 
-/* TODO:
-   - Predefined logging functions
-   - Close the file stream and free the log line buffer on catchable failures
-   - Logging callbacks for user-created functions  */
-
 static _Bool LoggingEnabled = 0;
 
 static _Bool UserLogEnabled = 0;
@@ -43,15 +38,10 @@ static struct ILogFile
 int
 BeginLogging(unsigned int logPrefix, const char *logFilename)
 {
-    /* TODO:
-       - Initialize output methods
-       - Check if file is directory
-       - Check if file exceeds set limits and archive file if it does
-       - Handle error checking  */
-
     if (!LoggingEnabled) {
         IErrState = IERR_NONE;
 
+        /* TODO: Check if file is directory  */
         if (logFilename != NULL) {
             if (!(Log.File = fopen(logFilename, "a+"))) {
                 Log.File = fopen(logFilename, "w+");
@@ -70,7 +60,9 @@ BeginLogging(unsigned int logPrefix, const char *logFilename)
 
         return 0;
     } else {
-        /* TODO: Error message */
+        fprintf(stderr, "WARNING: Tried to begin log with status %d.\n",
+                LoggingEnabled);
+        fprintf(stderr, "\tLogging already initialized.\n");
         return IERR_UNCLEAN_REINIT;
     }
 }
@@ -78,8 +70,6 @@ BeginLogging(unsigned int logPrefix, const char *logFilename)
 int
 EndLogging(void)
 {
-    /* TODO: Handle error checking  */
-
     if (LoggingEnabled) {
         fclose(Log.File);
 
@@ -88,7 +78,9 @@ EndLogging(void)
 
         return 0;
     } else {
-        /* TODO: Error message */
+        fprintf(stderr, "WARNING: Tried to end log with status %d.\n",
+                LoggingEnabled);
+        fprintf(stderr, "\tLogging not yet initialized.\n");
         return IERR_UNCLEAN_CLOSE;
     }
 }
@@ -156,8 +148,7 @@ LogPrint(LogType type, const char *msg, ...)
     Log.LineBuffer[LOGLINE] = '\0';
 
     fprintf(Log.File, Log.LineBuffer);
-    /* TODO: Print to stderr/stdout via fprintf or user callback if set
-       by initialize function  */
+    fprintf(stderr, Log.LineBuffer);
 
     /* NOTE: clear the LineBuffer for future use  */
     memset(Log.LineBuffer, '\0', LOGLINE + 1);
