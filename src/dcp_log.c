@@ -141,8 +141,8 @@ LogPrint(LogType type, const char *msg, ...)
             case '\n':
             case '\r':
             case '\t': {
-                tempLogBuff[i] = ' '; }
-            break;
+                tempLogBuff[i] = ' ';
+            } break;
         }
     }
 
@@ -155,8 +155,8 @@ LogPrint(LogType type, const char *msg, ...)
 
     Log.LineBuffer[LOGLINE] = '\0';
 
-    fprintf(Log.File, Log.LineBuffer);
-    fprintf(stderr, Log.LineBuffer);
+    fprintf(Log.File, "%s", Log.LineBuffer);
+    fprintf(stderr, "%s", Log.LineBuffer);
 
     /* NOTE: clear the LineBuffer for future use  */
     memset(Log.LineBuffer, '\0', LOGLINE + 1);
