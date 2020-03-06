@@ -40,6 +40,7 @@ the logFilename argument is NULL), and determines the log prefixes.
 The types of log prefixes are currently:
 - `LOGLABELS` - Shows the label before your log line.
 - `LOGTSTAMP` - Shows a date/timestamp before your log line.
+- `LOGSTDOUT` - Prints current log to stdout as well as log stream.
 
 ### `EndLogging()`
 

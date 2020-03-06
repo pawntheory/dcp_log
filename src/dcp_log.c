@@ -156,7 +156,7 @@ LogPrint(LogType type, const char *msg, ...)
     Log.LineBuffer[LOGLINE] = '\0';
 
     fprintf(Log.File, "%s", Log.LineBuffer);
-    fprintf(stderr, "%s", Log.LineBuffer);
+    if (LogPrefix & LOGSTDOUT) { fprintf(stderr, "%s", Log.LineBuffer); }
 
     /* NOTE: clear the LineBuffer for future use  */
     memset(Log.LineBuffer, '\0', LOGLINE + 1);
