@@ -64,6 +64,7 @@ BeginLogging(unsigned int logPrefix, const char *logFilename)
                 LoggingEnabled);
         fprintf(stderr, "\tLogging already initialized.\n");
 
+        IErrState = IERR_UNCLEAN_REINIT;
         return IERR_UNCLEAN_REINIT;
     }
 }
@@ -83,6 +84,7 @@ EndLogging(void)
                 LoggingEnabled);
         fprintf(stderr, "\tLogging not yet initialized.\n");
 
+        IErrState = IERR_UNCLEAN_CLOSE;
         return IERR_UNCLEAN_CLOSE;
     }
 }
